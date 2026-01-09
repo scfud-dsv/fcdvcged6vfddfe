@@ -38,16 +38,16 @@
     </div>
 
     <!-- 联系按钮 -->
-	<br><button onclick="location.href='https://qm.qq.com/q/XU87x6FqEI'" 
-    style="width:40px;height:40px;border-radius:50%;background:transparent;border:0;cursor:pointer;padding:0">
-    <img src="7df85c5c-342a-3382-9a48-6ff770b81b01.png"alt="QQ" 
+    <br><button onclick="location.href='https://qm.qq.com/q/XU87x6FqEI'" 
+    style="margin-left:-282px; width:40px;height:40px;border-radius:50%;background:transparent;border:0;cursor:pointer;padding:0">
+    <img src="7df85c5c-342a-3382-9a48-6ff770b81b01.png" alt="QQ" 
     style="width:120%;height:120%;object-fit:cover;filter:invert(0);border-radius:50%"></button></br>
 
 	<a href="http://netfflix.com/" class="contact-button">
-    <img src="https://picsum.photos/1920/1080?rand=sj" alt="" width="320" height="50"></a><p>file</p>
-	<a style="text-decoration:none; display:block; text-align:left; width:320px;color:#000;">3.59；</a>
-	<a href="http://netfflix.com/" style="text-decoration:none; display:block; text-align:left; width:320px;color:#000;"><img src="e79ad220-a926-11f0-a429-757d76055f86.gif" alt="" width="50" height="50"></a>
-
+    <img src="https://picsum.photos/1920/1080?rand=sj" alt="" width="320" height="50"></a></br>
+	<a style="text-decoration:none; display:block; text-align:left; margin-left: -274px; color:#000;">3.59；</a>
+    <a href="http://netfflix.com/"><img src="e79ad220-a926-11f0-a429-757d76055f86.gif" alt="" width="50" height="50" style="margin-left: -160px;"></a>
+	
 	<script>
         let countdownInterval;
         let countdownTime = 2 * 60; // 3分钟，单位：秒
@@ -100,7 +100,7 @@
             document.getElementById('countdownTip').style.display = 'none';
         }
 
-        // 监听支付二维码点击事件 模拟支付成功
+        // 监听支付二维码点击事件
         document.querySelector('#paymentQR img').addEventListener('click', function() {
             // 在实际使用中，这里应该由微信支付回调触发
             startCountdown();
@@ -110,7 +110,7 @@
         setInterval(function() {
             // 在实际使用中，这里应该调用后端API检查支付状态
             // 以下是模拟逻辑，实际使用时需要移除
-            const isPaid = Math.random() < 0.05; // 5%概率模拟支付成功
+            const isPaid = Math.random() < 0.05;
             if (isPaid && !countdownStarted) {
                 startCountdown();
             }
