@@ -1,3 +1,4 @@
+/* sfsdugf.css 2内容 */
 * {
     margin: 0;
     padding: 0;
@@ -97,4 +98,48 @@ h1 {
     font-size: 15px;
     color: #666;
     margin: 5px 0;
+}
+
+/* css刷新配置 */
+.refresh {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: white;
+    opacity: 0;
+    transition: transform 0.3s, opacity 0.3s;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.refresh::after {
+    content: "↻";
+    font-size: 18px;
+    color: #666;
+    font-weight: bold;
+}
+
+.refresh.loading::after {
+    animation: spin 1s linear infinite;
+}
+
+.refresh.active {
+    opacity: 1;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.refresh.pulling {
+    transition: none;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
