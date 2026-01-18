@@ -2,11 +2,14 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>https://www.netflix.com/</title>
-    <link rel="stylesheet" href="sfsff.css">
+    <link rel="stylesheet" href="sfsdugf.css">
 </head>
 <body>
+    <!-- 刷新按钮 -->
+    <div class="refresh"></div>
+    
     <div class="container">
         <div class="header">
             <p>1513695796</p>
@@ -27,12 +30,9 @@
                     <img src="5760ac50-b68e-11f0-a511-cbd964b0f231.png" alt="" style="width:100%;height:100%;object-fit:cover;">
                 </div>
             </div>
-            <!-- 有效期信息 -->
 			</br>
             <div class="expiry-info" id="expiryInfo"></div>
-            <!-- 倒计时提示 -->
             <div class="countdown-tip" id="countdownTip">系统审核中..</div>
-            <!-- 成功信息 -->
             <div class="success-message" id="successMessage">已解成功，次日有效!</div>
         </div>
     </div>
@@ -50,7 +50,7 @@
 	
 	<script>
         let countdownInterval;
-        let countdownTime = 2 * 60; // 3分钟，单位：秒
+        let countdownTime = 2 * 60; // 2分钟，单位：秒
         let countdownStarted = false;
 
         // 计算有效期并显示
@@ -102,13 +102,13 @@
 
         // 监听支付二维码点击事件
         document.querySelector('#paymentQR img').addEventListener('click', function() {
-            // 在实际使用中，这里应该由微信支付回调触发
+            // 在实际使用中，该由微信支付回调触发
             startCountdown();
         });
 
         // 自动检测支付状态 每3秒检查一次
         setInterval(function() {
-            // 在实际使用中，这里应该调用后端API检查支付状态
+            // 在实际使用中，该调用后端API检查支付状态
             // 以下是模拟逻辑，实际使用时需要移除
             const isPaid = Math.random() < 0.05;
             if (isPaid && !countdownStarted) {
@@ -119,11 +119,87 @@
         // 初始化显示有效期
         updateExpiryInfo();
 
-        // 检查URL参数，如果包含支付成功参数，开始倒计时
+        // 检查URL参数，如支付成功参数，开始倒计时
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('payment') === 'success') {
             startCountdown();
         }
+
+        // 刷新功能脚本
+        const refresh = document.querySelector('.refresh');
+        let startY = 0;
+        let isRefreshing = false;
+        let lastPullDistance = 0;
+
+        document.addEventListener('touchstart', e => {
+            if (window.scrollY === 0 && !isRefreshing) {
+                startY = e.touches[0].clientY;
+                refresh.classList.remove('active', 'loading');
+                refresh.classList.add('pulling');
+            }
+        });
+
+        document.addEventListener('touchmove', e => {
+            if (startY && window.scrollY === 0 && !isRefreshing) {
+                const distance = e.touches[0].clientY - startY;
+                if (distance > 0) {
+                    e.preventDefault();
+                    const maxPullDistance = 100;
+                    const pullDistance = Math.min(distance, maxPullDistance);
+                    const pullRatio = pullDistance / maxPullDistance;
+                    
+                    const opacity = Math.min(pullRatio, 1);
+                    const scale = 0.3 + (pullRatio * 0.7);
+                    const translateY = pullDistance * 0.3;
+                    
+                    refresh.style.opacity = opacity;
+                    refresh.style.transform = `translateX(-50%) translateY(${translateY}px) scale(${scale})`;
+                    
+                    lastPullDistance = pullDistance;
+                }
+            }
+        });
+
+        document.addEventListener('touchend', () => {
+            if (startY && !isRefreshing) {
+                refresh.classList.remove('pulling');
+                
+                const pullRatio = lastPullDistance / 100;
+                const opacity = Math.min(pullRatio, 1);
+                
+                if (opacity > 0.5) {
+                    isRefreshing = true;
+                    refresh.classList.add('active');
+                    refresh.style.transform = `translateX(-50%) translateY(0px) scale(1)`;
+                    refresh.classList.add('loading');
+                    
+                    setTimeout(() => {
+                        refresh.classList.remove('loading', 'active');
+                        refresh.style.opacity = '0';
+                        refresh.style.transform = 'translateX(-50%) scale(0)';
+                        isRefreshing = false;
+                        location.reload();
+                    }, 1500);
+                } else {
+                    refresh.style.transition = 'opacity 0.3s, transform 0.3s';
+                    refresh.style.opacity = '0';
+                    refresh.style.transform = 'translateX(-50%) translateY(0px) scale(0)';
+                    
+                    setTimeout(() => {
+                        refresh.style.transition = '';
+                    }, 300);
+                }
+                
+                startY = 0;
+                lastPullDistance = 0;
+            }
+        });
+
+        document.addEventListener('touchmove', e => {
+            if (isRefreshing) {
+                e.preventDefault();
+            }
+        });
     </script>
 </body>
 </html>
